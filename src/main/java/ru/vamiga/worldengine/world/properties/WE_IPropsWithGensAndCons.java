@@ -26,6 +26,11 @@
 
 package ru.vamiga.worldengine.world.properties;
 
+import net.minecraftforge.fml.common.IWorldGenerator;
+import ru.vamiga.worldengine.world.gen.custom.abstracts.WE_ICreateChunkGen;
+import ru.vamiga.worldengine.world.gen.custom.abstracts.WE_ICreateChunkGen_InXYZ;
+import ru.vamiga.worldengine.world.gen.custom.abstracts.WE_ICreateChunkGen_InXZ;
+
 /**
  * ИНТЕРФЕЙС. Основа для настроек (мира и биома) со списками генераторов и с условиями генерации.
  * @author VamigA

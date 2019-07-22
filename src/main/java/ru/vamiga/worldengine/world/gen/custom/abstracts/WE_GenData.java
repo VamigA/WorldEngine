@@ -28,7 +28,6 @@ package ru.vamiga.worldengine.world.gen.custom.abstracts;
 
 import net.minecraft.world.chunk.ChunkPrimer;
 import ru.vamiga.worldengine.world.biome.WE_Biome;
-import ru.vamiga.worldengine.world.gen.WE_ChunkGenerator;
 
 /**
  * Класс с данными главного генератора для передачи их пользовательским генераторам первой стадии генерации чанков.

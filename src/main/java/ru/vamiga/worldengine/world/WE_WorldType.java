@@ -43,9 +43,7 @@ import ru.vamiga.worldengine.WE_WorldRegistry;
  * @author VamigA
  */
 public class WE_WorldType extends WorldType {
-	/**
-	 * Конструктор.
-	 */
+	/** Конструктор. */
 	public WE_WorldType() {
 		super(WE_WorldRegistry.cfgWorldTypeWEName);
 	}
