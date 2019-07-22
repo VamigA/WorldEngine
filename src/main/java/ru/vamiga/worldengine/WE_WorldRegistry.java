@@ -31,6 +31,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import ru.vamiga.worldengine.world.WE_WorldType;
+import ru.vamiga.worldengine.world.biome.WE_Biome;
 
 /**
  * Инициализатор мира WorldEngine. Выполняет основную работу при запуске игры.
