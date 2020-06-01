@@ -1,11 +1,11 @@
 /*
  * ////////////////////////////////////-
- * //#===============================//= Version: 2.0.0.1122 or later.
+ * //#===============================//= Version: 2.0.0.1152 or later.
  * //#=-------| WorldEngine |-------=//= By Vamig Aliev (vk.com/win_vista).
  * //#===============================//= Part of VamigA_core (vk.com/vamiga).
  * ////////////////////////////////////-
  * 
- * Copyright (C) 2019 Vamig Aliev, all rights reserved.
+ * Copyright (C) 2020 Vamig Aliev, all rights reserved.
  * Licensed under the GNU LGPL 3 or later.
  * 
  * This file is part of WorldEngine.
@@ -26,81 +26,29 @@
 
 package ru.vamiga.worldengine.world;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiCreateWorld;
+import java.util.function.LongFunction;
+
 import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
-import net.minecraft.world.biome.BiomeProvider;
-import net.minecraft.world.gen.ChunkGeneratorSettings;
-import net.minecraft.world.gen.IChunkGenerator;
-import net.minecraft.world.gen.layer.GenLayer;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import ru.vamiga.worldengine.WE_WorldRegistry;
+import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.gen.IExtendedNoiseRandom;
+import net.minecraft.world.gen.OverworldGenSettings;
+import net.minecraft.world.gen.area.IArea;
+import net.minecraft.world.gen.area.IAreaFactory;
+import ru.vamiga.worldengine.WE_Configuration.CommonConfig;
+import ru.vamiga.worldengine.world.gen.WE_ChunkGenerator;
 
 /**
  * Тип мира WorldEngine. Добавляет новый тип мира в игру.
  * @author VamigA
  */
 public class WE_WorldType extends WorldType {
-	/** Конструктор. */
 	public WE_WorldType() {
-		super(WE_WorldRegistry.cfgWorldTypeWEName);
+		super(CommonConfig.cfgWorldTypeWEName.get());
 	}
 	
-	/**
-	 * Создает и выдает игре главный контроллер биомов WorldEngine.
-	 * @param world - класс мира.
-	 */
 	@Override
-	public BiomeProvider getBiomeProvider(World world) {
-		return new WE_BiomeProvider(world, WE_WorldRegistry.WEGenWorldProperties);
-	}
-	
-	/**
-	 * Создает и выдает игре главный генератор мира WorldEngine.
-	 * @param world - класс мира.
-	 * @param generatorOptions - настройки стандартного генератора Minecraft (не нужны для WorldEngine).
-	 */
-	@Override
-	public IChunkGenerator getChunkGenerator(World world, String generatorOptions) {
-		return new WE_ChunkGenerator(world);
-	}
-	
-	/** WorldEngine не использует это. Данная функция не нужна для генераторов WorldEngine. */
-	@Override
-	public GenLayer getBiomeLayer(long worldSeed, GenLayer parentLayer, ChunkGeneratorSettings chunkSettings) {
-		return null;
-	}
-	
-	/** Выдает правильное имя типа мира WorldEngine для отображения в интерфейсе. */
-	@Override
-	@SideOnly(Side.CLIENT)
-	public String getTranslationKey() {
-		return WE_WorldRegistry.cfgWorldTypeWEName;
-	}
-	
-	/** Выдает правильное имя типа мира WorldEngine для отображения в интерфейсе. */
-	@Override
-	@SideOnly(Side.CLIENT)
-	public String getInfoTranslationKey() {
-		return WE_WorldRegistry.cfgWorldTypeWEName;
-	}
-	
-	/** Можно ли настроить генерацию этого мира? При true в интерфейсе будет кнопка настройки. */
-	@Override
-	public boolean isCustomizable() {
-		return true;
-	}
-	
-	/**
-	 * Действие при нажатии на кнопку настройки. Вызывает соответствующий интерфейс.
-	 * @param instance - главный класс самой игры Minecraft.
-	 * @param guiCreateWorld - нынешний отображаемый интерфейс.
-	 */
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void onCustomizeButton(Minecraft instance, GuiCreateWorld guiCreateWorld) {
-		//instance.displayGuiScreen(new WE_CreateGUI(guiCreateWorld));
+	public ChunkGenerator<?> createChunkGenerator(World world) {
+		return new WE_ChunkGenerator<>(world); //TODO Костыли!
 	}
 }

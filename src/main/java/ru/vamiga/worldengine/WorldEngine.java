@@ -1,11 +1,11 @@
 /*
  * ////////////////////////////////////-
- * //#===============================//= Version: 2.0.0.1122 or later.
+ * //#===============================//= Version: 2.0.0.1152 or later.
  * //#=-------| WorldEngine |-------=//= By Vamig Aliev (vk.com/win_vista).
  * //#===============================//= Part of VamigA_core (vk.com/vamiga).
  * ////////////////////////////////////-
  * 
- * Copyright (C) 2019 Vamig Aliev, all rights reserved.
+ * Copyright (C) 2020 Vamig Aliev, all rights reserved.
  * Licensed under the GNU LGPL 3 or later.
  * 
  * This file is part of WorldEngine.
@@ -26,56 +26,61 @@
 
 package ru.vamiga.worldengine;
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.Mod.EventHandler;
-import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.config.ModConfig.Type;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 /**
- * Главный класс WorldEngine: 1) Инициализирует модификацию. 2) Содержит важную информацию о модификации.
+ * Главный класс WorldEngine: инициализирует модификацию и содержит важную информацию о модификации.
  * @author VamigA
  */
-@Mod(modid = WorldEngine.modid, name = WorldEngine.name, version = WorldEngine.version)
+@Mod(WorldEngine.modid)
 public class WorldEngine {
 	/** Информация: 1) modid - идентификатор модификации. 2) name - имя модификации. 3) version - версия модификации. */
-	public static final String modid = "worldengine", name = "WorldEngine", version = "2.0.0.1122";
-	
-	/** Proxy-классы модификации. Делят процессы между сервером и клиентом. */
-	@SidedProxy(serverSide = "ru.vamiga.worldengine.WE_CommonProxy", clientSide = "ru.vamiga.worldengine.WE_ClientProxy")
-	public static WE_CommonProxy proxy;
-	
-	/** Журнал модификации. */
+	public static final String modid = "worldengine", name = "WorldEngine", version = "2.0.0.1152";
+	/** Журнал модификации (для вывода информации в общий журнал игры). */
 	public static Logger log;
 	
-	/**
-	 * Функция прединициализации (вызывает соответствующую функцию proxy-класса).
-	 * @param event - событие прединициализации.
-	 */
-	@EventHandler
-	public void preInit(FMLPreInitializationEvent event) {
-		proxy.preInit(event);
+	/** Конструктор. Регистрирует WorldEngine в Minecraft. */
+	public WorldEngine() {
+		log = LogManager.getLogger();
+		log("////////////////////////////////////-"                                       );
+		log("//#===============================//=* Version: " + WorldEngine.version + ".");
+		log("//#=-------| WorldEngine |-------=//=* By Vamig Aliev (vk.com/win_vista)."   );
+		log("//#===============================//=* Part of VamigA_core (vk.com/vamiga)." );
+		log("////////////////////////////////////-"                                       );
+		log("-=| Copyright (C) 2020 Vamig Aliev, all rights reserved."                    );
+		log("-=| Licensed under the GNU LGPL 3 or later."                                 );
+		
+		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup        );
+		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
+		
+		ModLoadingContext.get().registerConfig(Type.COMMON, WE_Configuration.common_spec);
+		
+		MinecraftForge.EVENT_BUS.register(this);
 	}
 	
 	/**
-	 * Функция инициализации (вызывает соответствующую функцию proxy-класса).
-	 * @param event - событие инициализации.
+	 * Начальная настройка (преинициализация) игры и всей модификации.
+	 * @param event Событие Forge на этом этапе.
 	 */
-	@EventHandler
-	public void init(FMLInitializationEvent event) {
-		proxy.init(event);
+	public void setup(FMLCommonSetupEvent event) {
+		WE_WorldRegistry.register();
 	}
 	
 	/**
-	 * Функция постинициализации (вызывает соответствующую функцию proxy-класса).
-	 * @param event - событие постинициализации.
+	 * То же самое, но ТОЛЬКО НА СТОРОНЕ КЛИЕНТА.
+	 * @param event Событие Forge на этом этапе.
 	 */
-	@EventHandler
-	public void postInit(FMLPostInitializationEvent event) {
-		proxy.postInit(event);
+	public void doClientStuff(FMLClientSetupEvent event) {
+		
 	}
 	
 	/**

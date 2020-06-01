@@ -1,11 +1,11 @@
 /*
  * ////////////////////////////////////-
- * //#===============================//= Version: 2.0.0.1122 or later.
+ * //#===============================//= Version: 2.0.0.1152 or later.
  * //#=-------| WorldEngine |-------=//= By Vamig Aliev (vk.com/win_vista).
  * //#===============================//= Part of VamigA_core (vk.com/vamiga).
  * ////////////////////////////////////-
  * 
- * Copyright (C) 2019 Vamig Aliev, all rights reserved.
+ * Copyright (C) 2020 Vamig Aliev, all rights reserved.
  * Licensed under the GNU LGPL 3 or later.
  * 
  * This file is part of WorldEngine.
@@ -24,38 +24,21 @@
  * along with WorldEngine. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ru.vamiga.worldengine.world.gen.custom.abstracts;
-
-import net.minecraft.block.state.IBlockState;
-import ru.vamiga.worldengine.world.biome.WE_Biome;
+package ru.vamiga.worldengine.util;
 
 /**
- * Первая стадия генерации чанков: абстрактный класс пользовательского генератора на каждый блок [X, Y, Z].
+ * Это функциональный интерфейс. Нужен только для передачи функции как аргумента для класса.
+ * @param <ValueType> Тип значения, которое хранит данный буфер.
  * @author VamigA
  */
-public abstract class WE_CreateChunkGen_InXYZ implements WE_ICreateChunkGen_InXYZ {
+@FunctionalInterface
+public interface ISmartMathFunction<ValueType extends Object> {
 	/**
-	 * Получает блок с координат в чанке.
-	 * @param d - нынешние данные генератора.
+	 * Функция, которая передается аргументом как лямбда-выражение. В данном случае эта функция возвращает нужные данные по координатам.
+	 * Передача ее классу WE_RegionBuffer позволяет использовать ее вместе с временным буфером, который хранит ее значения для повторного использования.
+	 * @param x Координата X, по которой запрашиваются данные.
+	 * @param z Координата Z, по которой запрашиваются данные.
+	 * @return Нужные данные типа, который был указан при создании класса как ValueType.
 	 */
-	public IBlockState getBlock(WE_GenData d) {
-		return d.primer.getBlockState(d.bx, d.by, d.bz);
-	}
-	
-	/**
-	 * Ставит блок в координатах в чанке.
-	 * @param d - нынешние данные генератора.
-	 * @param bs - блок.
-	 */
-	public void setBlock(WE_GenData d, IBlockState bs) {
-		d.primer.setBlockState(d.bx, d.by, d.bz, bs);
-	}
-	
-	/**
-	 * Получает биом с координат в чанке.
-	 * @param d - нынешние данные генератора.
-	 */
-	public WE_Biome getBiome(WE_GenData d) {
-		return d.biomes[d.bx | d.bz << 4];
-	}
+	public abstract ValueType g(long x, long z);
 }

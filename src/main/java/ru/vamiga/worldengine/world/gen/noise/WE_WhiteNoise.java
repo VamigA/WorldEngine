@@ -24,38 +24,41 @@
  * along with WorldEngine. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ru.vamiga.worldengine;
+package ru.vamiga.worldengine.world.gen.noise;
 
-import ru.vamiga.worldengine.WE_Configuration.CommonConfig;
-import ru.vamiga.worldengine.world.WE_WorldType;
+import ru.vamiga.worldengine.util.WE_RegionBuffer;
 
 /**
- * Инициализатор мира WorldEngine. Выполняет основную работу при запуске игры.
- * Регистрирует, настраивает и запускает основной код модификации.
+ * Отвечает за псевдослучайную генерацию белого шума. Из этих данных и исходят генераторы WorldEngine при работе.
+ * Возвращает дробные числа в диапазоне от -1.0 до 1.0 на основании лишь координат X и Z, а также "семени".
+ * При одинаковых входных данных выходные данные всегда останутся теми же - это очень важно.
  * @author VamigA
  */
-public class WE_WorldRegistry {
-	/** Тип мира "WorldEngine". Позволяет игроку создавать свой мир прямо в меню. */
-	public static WE_WorldType WEWorldType;
-	/** Основной (технический) единый биом WorldEngine. */
-	//public static WE_Biome WEBiome;
+public class WE_WhiteNoise {
+	/** Семя - число, на основании которого и ведутся расчеты. */
+	public long seed;
+	
+	public WE_RegionBuffer<Double> smart;
 	
 	/**
-	 * Функция прединициализации.
-	 * @param event - событие прединициализации.
+	 * Конструктор.
+	 * @param genSeed Семя.
 	 */
-	public static void register() {
-	//	/*/ Создание основного биома модификации... /*/
-	//	WEBiome = new WE_Biome();
-		
-		/*/ Добавление типа мира "WorldEngine"... /*/
-		if(CommonConfig.cfgAddWorldTypeWE.get())
-			WEWorldType = new WE_WorldType();
-		
-	//	/*/ Регистрация основного биома модификации... /*/
-	//	if(cfgRegisterBiomeWE) {
-	//		WEBiome.setRegistryName(cfgWEBiomePName);
-	//		ForgeRegistries.BIOMES.register(WEBiome);
-	//	}
+	public WE_WhiteNoise(long genSeed) {
+		seed = (long)Math.pow(genSeed, 11L) * 171L + 51484313L;
+		smart = new WE_RegionBuffer<Double>(4, this::gen2D);
 	}
+	
+	/**
+	 * Главная функция - рассчитывает и выводит неизменное псевдослучайное число на основании входных данных.
+	 * @param x Координата X типа Long.
+	 * @param z Координата Z типа Long.
+	 * @return Псевдослучайное число типа Double в диапазоне от -1.0 до 1.0.
+	 */
+	public double gen2D(long x, long z) {
+		long n = seed + x * 4L + z * 341L; n = (n << 13L) ^ n;
+	    return 1.0 - (double)((n * (n * n * 15731L + 789221L) + 1376312589L) & 2147483647L) / 1073741824.0;
+	}
+	
+	
 }

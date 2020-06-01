@@ -1,0 +1,30 @@
+modLoader="javafml"
+loaderVersion="[31,)"
+issueTrackerURL="https://vk.com/vamiga"
+
+[[mods]]
+modId="worldengine"
+version="2.0.0.1152"
+displayName="WorldEngine"
+updateJSONURL="https://vk.com/vamiga"
+displayURL="https://vk.com/vamiga"
+logoFile="logo.png"
+credits="Thanks to AlexSocol and timaxa007!"
+authors="VamigA"
+description='''
+WorldEngine - global customization!
+It is a new world generator which can be very easy and flexibly configured.
+'''
+
+[[dependencies.worldengine]]
+	modId="minecraft"
+	mandatory=true
+	versionRange="[1.15.2]"
+	ordering="NONE"
+	side="BOTH"
+[[dependencies.worldengine]]
+	modId="forge"
+	mandatory=true
+	versionRange="[31,)"
+	ordering="NONE"
+	side="BOTH"
