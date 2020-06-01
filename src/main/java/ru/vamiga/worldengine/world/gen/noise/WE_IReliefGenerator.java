@@ -24,21 +24,30 @@
  * along with WorldEngine. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ru.vamiga.worldengine.util;
+package ru.vamiga.worldengine.world.gen.noise;
 
 /**
- * Это функциональный интерфейс. Нужен только для передачи функции как аргумента для класса.
- * @param <ValueType> Тип значения, которое хранит данный буфер.
+ * Интерфейс для генераторов рельефа (шум значений, шум Перлина и так далее).
  * @author VamigA
  */
-@FunctionalInterface
-public interface ISmartMathFunction<ValueType extends Object> {
+public interface WE_IReliefGenerator {
 	/**
-	 * Функция, которая передается аргументом как лямбда-выражение. В данном случае эта функция возвращает нужные данные по координатам.
-	 * Передача ее классу WE_RegionBuffer позволяет использовать ее вместе с временным буфером, который хранит ее значения для повторного использования.
-	 * @param x Координата X, по которой запрашиваются данные.
-	 * @param z Координата Z, по которой запрашиваются данные.
-	 * @return Нужные данные типа, который был указан при создании класса как ValueType.
+	 * Возвращает семя генератора.
+	 * @return Семя.
 	 */
-	ValueType g(long x, long z);
+	long getSeed();
+	
+	/**
+	 * Задает семя генератора.
+	 * @param seed Новое семя.
+	 */
+	void setSeed(long seed);
+	
+	/**
+	 * Выдает высоту на этом блоке (множественные вызовы этой функции и генерируют ландшафт).
+	 * @param x Координата блока X.
+	 * @param z Координата блока Z.
+	 * @return Высота для карты высот.
+	 */
+	double genNoise2D(double x, double z);
 }
