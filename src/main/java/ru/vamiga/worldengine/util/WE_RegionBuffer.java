@@ -26,8 +26,6 @@
 
 package ru.vamiga.worldengine.util;
 
-import java.util.Arrays;
-
 /**
  * Это класс продвинутого двумерного буфера WorldEngine.
  * Нужен чисто для временного хранения и использования различной информации, которую затратно сгенерировать снова.
@@ -155,8 +153,8 @@ public class WE_RegionBuffer<ValueType extends Object> {
 		
 		/** Конструктор. Инициализирует массивы. */
 		public SubRegion() {
-			array = new Object[(int)size][(int)size]; isValue = new boolean[(int)size][(int)size];
-			for(int i = 0; i < (int)size; i++) { Arrays.fill(array[i], null); Arrays.fill(isValue[i], false); }
+			array   = new Object [(int)size][(int)size];
+			isValue = new boolean[(int)size][(int)size];
 		}
 		
 		/**

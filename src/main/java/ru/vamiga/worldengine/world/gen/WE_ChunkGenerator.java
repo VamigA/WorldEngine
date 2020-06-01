@@ -1,35 +1,26 @@
 package ru.vamiga.worldengine.world.gen;
 
-import java.util.Set;
-
-import com.google.common.collect.Sets;
-
 import net.minecraft.block.Blocks;
 import net.minecraft.util.SharedSeedRandom;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.Biomes;
 import net.minecraft.world.chunk.IChunk;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.GenerationSettings;
-import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.Heightmap.Type;
 import net.minecraft.world.gen.WorldGenRegion;
 import ru.vamiga.worldengine.world.biome.WE_BiomeProvider;
 import ru.vamiga.worldengine.world.gen.noise.WE_PerlinNoise;
-import ru.vamiga.worldengine.world.gen.noise.WE_ValueNoise;
-import ru.vamiga.worldengine.world.gen.noise.WE_WhiteNoise;
 //TODO Костыли!
 public class WE_ChunkGenerator<C extends GenerationSettings> extends ChunkGenerator<C> {
-	public WE_ValueNoise n;
+	public WE_PerlinNoise n;
 	
 	public WE_ChunkGenerator(IWorld myWorld) {
 
 		super(myWorld, new WE_BiomeProvider(Biome.BIOMES), (C) new GenerationSettings());
-		n = new WE_ValueNoise(myWorld.getSeed(), 0.5, 6, 400, 10, 400, 64, (byte)2);
+		n = new WE_PerlinNoise(myWorld.getSeed(), 0.5, 6, 400, 50, 400, 64, (byte)2);
 	}
 
 	@Override

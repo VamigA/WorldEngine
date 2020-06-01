@@ -76,11 +76,11 @@ public class WE_WhiteNoise {
 	
 	/** Добавляет буфер для временного хранения значений. */
 	public void makeSmartForValues () {
-		smartVal = new WE_RegionBuffer<Double  >(128, this::gen2D   );
+		smartVal = new WE_RegionBuffer<Double  >(1024, this::gen2D   );
 	}
 	
 	/** Добавляет буфер для временного хранения векторов. */
 	public void makeSmartForVectors() {
-		smartVec = new WE_RegionBuffer<Double[]>(128, this::vecGen2D);
+		smartVec = new WE_RegionBuffer<Double[]>(1024, this::vecGen2D);
 	}
 }
