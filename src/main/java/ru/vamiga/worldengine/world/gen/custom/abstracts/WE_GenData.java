@@ -1,11 +1,11 @@
 /*
  * ////////////////////////////////////-
- * //#===============================//= Version: 2.0.0.1122 or later.
+ * //#===============================//= Version: 2.0.0.1152 or later.
  * //#=-------| WorldEngine |-------=//= By Vamig Aliev (vk.com/win_vista).
  * //#===============================//= Part of VamigA_core (vk.com/vamiga).
  * ////////////////////////////////////-
  * 
- * Copyright (C) 2019 Vamig Aliev, all rights reserved.
+ * Copyright (C) 2020 Vamig Aliev, all rights reserved.
  * Licensed under the GNU LGPL 3 or later.
  * 
  * This file is part of WorldEngine.
@@ -26,41 +26,37 @@
 
 package ru.vamiga.worldengine.world.gen.custom.abstracts;
 
-import net.minecraft.world.chunk.ChunkPrimer;
-import ru.vamiga.worldengine.world.biome.WE_Biome;
+import net.minecraft.world.chunk.IChunk;
+import net.minecraft.world.gen.WorldGenRegion;
+import ru.vamiga.worldengine.world.gen.WE_ChunkGenerator;
 
 /**
  *  ласс с данными главного генератора дл€ передачи их пользовательским генераторам первой стадии генерации чанков.
- * √лавный генератор, массив блоков будущего чанка, координаты чанка, локальные координаты блока...
  * @author VamigA
  */
 public class WE_GenData {
-	/** √лавный генератор чанков WorldEngine. ¬ы можете получить классы World или Random отсюда. */
-	public WE_ChunkGenerator gen;
-	/** "√рунтовка" чанка. —одержит огромный массив с блоками будущего чанка. */
-	public ChunkPrimer primer;
-	/**  оординаты чанка. */
-	public long cx, cz;
-	/** ћассив с биомами чанка. */
-	public WE_Biome[] biomes;
+	/** √лавный генератор чанков WorldEngine. «десь можно получить World или Random. */
+	public WE_ChunkGenerator<?> generator;
+	/** √енерируемый регион мира. «десь можно получить World или Random, а также координаты главного генерируемого чанка. */
+	public WorldGenRegion region;
+	/** —ам генерируемый чанк. ќтсюда можно установить блок или получить его на координатах, а также узнать биомы. */
+	public IChunk chunk;
 	/** ƒанные высот слоев рельефа в этом чанке. */
 	public int[][] relief;
 	/** Ћокальные координаты блока в этом чанке (0...15; Y: 0...255). ќни не всегда используютс€. */
 	public int bx, by, bz;
 	
 	/**
-	 * Constructor.
-	 * @param genp - главный генератор чанков WorldEngine.
-	 * @param primerp - массив блоков будущего чанка.
-	 * @param cxp - координата X этого чанка.
-	 * @param czp - координата Z этого чанка.
-	 * @param biomesp - массив биомов будущего чанка.
-	 * @param reliefp - данные высот слоев рельефа в этом чанке.
-	 * @param bxp - локальна€ координата X блока в этом чанке.
-	 * @param byp - локальна€ координата Y блока в этом чанке.
-	 * @param bzp - локальна€ координата Z блока в этом чанке.
+	 *  онструктор.
+	 * @param gen √лавный генератор чанков WorldEngine.
+	 * @param reg √енерируемый регион мира.
+	 * @param ch —ам генерируемый чанк.
+	 * @param rel ƒанные высот слоев рельефа в этом чанке.
+	 * @param bxp Ћокальна€ координата X блока в этом чанке.
+	 * @param byp Ћокальна€ координата Y блока в этом чанке.
+	 * @param bzp Ћокальна€ координата Z блока в этом чанке.
 	 */
-	public WE_GenData(WE_ChunkGenerator genp, ChunkPrimer primerp, long cxp, long czp, WE_Biome[] biomesp, int[][] reliefp, int bxp, int byp, int bzp) {
-		gen = genp; primer = primerp; cx = cxp; cz = czp; biomes = biomesp; relief = reliefp; bx = bxp; by = byp; bz = bzp;
+	public WE_GenData(WE_ChunkGenerator<?> gen, WorldGenRegion reg, IChunk ch, int[][] rel, int bxp, int byp, int bzp) {
+		generator = gen; region = reg; chunk = ch; relief = rel; bx = bxp; by = byp; bz = bzp;
 	}
 }

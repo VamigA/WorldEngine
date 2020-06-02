@@ -24,41 +24,31 @@
  * along with WorldEngine. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ru.vamiga.worldengine.world.gen.custom.abstracts;
+package ru.vamiga.worldengine.world.biome;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.util.math.BlockPos;
-import ru.vamiga.worldengine.world.biome.WE_Biome;
+import net.minecraft.world.biome.Biome;
+import ru.vamiga.worldengine.world.properties.WE_IBiomeProperties;
 
 /**
- * Первая стадия генерации чанков: абстрактный класс пользовательского генератора на каждый блок [X, Y, Z].
+ * Класс главного технического биома WorldEngine.
  * @author VamigA
  */
-public abstract class WE_CreateChunkGen_InXYZ implements WE_ICreateChunkGen_InXYZ {
-	/**
-	 * Получает блок с координат в чанке.
-	 * @param d Нынешние данные генератора.
-	 * @return Нужный блок.
-	 */
-	public BlockState getBlock(WE_GenData d) {
-		return d.chunk.getBlockState(new BlockPos(d.bx, d.by, d.bz));
-	}
+public class WE_Biome extends Biome {
+	/** Настройки биома. */
+	public WE_IBiomeProperties properties;
 	
 	/**
-	 * Ставит блок в координатах в чанке.
-	 * @param d Нынешние данные генератора.
-	 * @param bs Блок.
+	 * Идентификатор биома в реестре игры. WorldEngine автоматически записывает сюда значение.
+	 * Значение -1 означает, что в данный момент биом не имеет идентификатора в игре (вероятно, не зарегистрирован).
 	 */
-	public void setBlock(WE_GenData d, BlockState bs) {
-		d.chunk.setBlockState(new BlockPos(d.bx, d.by, d.bz), bs, false);
-	}
+	public int regID;
 	
 	/**
-	 * Получает биом с координат в чанке.
-	 * @param d Нынешние данные генератора.
-	 * @return Нужный биом.
+	 * Конструктор.
+	 * @param weProps Настройки биома.
 	 */
-	public WE_Biome getBiome(WE_GenData d) {
-		return (WE_Biome)d.chunk.getBiomes().getNoiseBiome(d.bx, d.by, d.bz);
+	public WE_Biome(WE_IBiomeProperties weProps) {
+		super(weProps.getVanillaBiomeProperties());
+		properties = weProps; regID = -1;
 	}
 }

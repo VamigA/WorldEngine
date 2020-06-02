@@ -24,41 +24,37 @@
  * along with WorldEngine. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ru.vamiga.worldengine.world.gen.custom.abstracts;
+package ru.vamiga.worldengine.world.properties;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.util.math.BlockPos;
-import ru.vamiga.worldengine.world.biome.WE_Biome;
+import net.minecraft.world.biome.Biome.Builder;
 
 /**
- * Первая стадия генерации чанков: абстрактный класс пользовательского генератора на каждый блок [X, Y, Z].
+ * ИНТЕРФЕЙС. Класс с пользовательскими настройками биома, генератор читает их.
  * @author VamigA
  */
-public abstract class WE_CreateChunkGen_InXYZ implements WE_ICreateChunkGen_InXYZ {
+public interface WE_IBiomeProperties extends WE_IPropsWithGensAndCons {
 	/**
-	 * Получает блок с координат в чанке.
-	 * @param d Нынешние данные генератора.
-	 * @return Нужный блок.
+	 * Возвращает ванильный объект класса Builder (если нужно изменить цвета, дать название...).
+	 * @return Ванильный мусор.
 	 */
-	public BlockState getBlock(WE_GenData d) {
-		return d.chunk.getBlockState(new BlockPos(d.bx, d.by, d.bz));
-	}
+	Builder getVanillaBiomeProperties();
 	
 	/**
-	 * Ставит блок в координатах в чанке.
-	 * @param d Нынешние данные генератора.
-	 * @param bs Блок.
+	 * Возвращает IReliefLayerTerrainPropertiesInBiome по идентификатору [i].
+	 * @param i Идентификатор.
+	 * @return IReliefLayerTerrainPropertiesInBiome - настройки.
 	 */
-	public void setBlock(WE_GenData d, BlockState bs) {
-		d.chunk.setBlockState(new BlockPos(d.bx, d.by, d.bz), bs, false);
-	}
-	
+	IReliefLayerTerrainPropertiesInBiome getTerrainProps(int i);
 	/**
-	 * Получает биом с координат в чанке.
-	 * @param d Нынешние данные генератора.
-	 * @return Нужный биом.
+	 * Возвращает количество элементов в списке настроек: IReliefLayerTerrainPropertiesInBiome.
+	 * @return Размер списка.
 	 */
-	public WE_Biome getBiome(WE_GenData d) {
-		return (WE_Biome)d.chunk.getBiomes().getNoiseBiome(d.bx, d.by, d.bz);
+	int sizeofTerrainProps();
+	/**
+	 * ИНТЕРФЕЙС. Настройки рельефного слоя (GenReliefLayer) в этом биоме.
+	 * @author VamigA
+	 */
+	interface IReliefLayerTerrainPropertiesInBiome {
+		//TODO!
 	}
 }

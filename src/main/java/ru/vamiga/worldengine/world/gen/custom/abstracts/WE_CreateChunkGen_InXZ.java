@@ -1,11 +1,11 @@
 /*
  * ////////////////////////////////////-
- * //#===============================//= Version: 2.0.0.1122 or later.
+ * //#===============================//= Version: 2.0.0.1152 or later.
  * //#=-------| WorldEngine |-------=//= By Vamig Aliev (vk.com/win_vista).
  * //#===============================//= Part of VamigA_core (vk.com/vamiga).
  * ////////////////////////////////////-
  * 
- * Copyright (C) 2019 Vamig Aliev, all rights reserved.
+ * Copyright (C) 2020 Vamig Aliev, all rights reserved.
  * Licensed under the GNU LGPL 3 or later.
  * 
  * This file is part of WorldEngine.
@@ -26,7 +26,8 @@
 
 package ru.vamiga.worldengine.world.gen.custom.abstracts;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
+import net.minecraft.util.math.BlockPos;
 import ru.vamiga.worldengine.world.biome.WE_Biome;
 
 /**
@@ -36,28 +37,30 @@ import ru.vamiga.worldengine.world.biome.WE_Biome;
 public abstract class WE_CreateChunkGen_InXZ implements WE_ICreateChunkGen_InXZ {
 	/**
 	 * ѕолучает блок с координат в чанке.
-	 * @param d - нынешние данные генератора.
-	 * @param ly - локальна€ координата Y в этом чанке.
+	 * @param d Ќынешние данные генератора.
+	 * @param ly Ћокальна€ координата Y в этом чанке.
+	 * @return Ќужный блок.
 	 */
-	public IBlockState getBlock(WE_GenData d, int ly) {
-		return d.primer.getBlockState(d.bx, ly, d.bz);
+	public BlockState getBlock(WE_GenData d, int ly) {
+		return d.chunk.getBlockState(new BlockPos(d.bx, ly, d.bz));
 	}
 	
 	/**
 	 * —тавит блок в координатах в чанке.
-	 * @param d - нынешние данные генератора.
-	 * @param bs - блок.
-	 * @param ly - локальна€ координата Y в этом чанке.
+	 * @param d Ќынешние данные генератора.
+	 * @param bs Ѕлок.
+	 * @param ly Ћокальна€ координата Y в этом чанке.
 	 */
-	public void setBlock(WE_GenData d, IBlockState bs, int ly) {
-		d.primer.setBlockState(d.bx, ly, d.bz, bs);
+	public void setBlock(WE_GenData d, BlockState bs, int ly) {
+		d.chunk.setBlockState(new BlockPos(d.bx, ly, d.bz), bs, false);
 	}
 	
 	/**
 	 * ѕолучает биом с координат в чанке.
-	 * @param d - нынешние данные генератора.
+	 * @param d Ќынешние данные генератора.
+	 * @return Ќужный биом.
 	 */
 	public WE_Biome getBiome(WE_GenData d) {
-		return d.biomes[d.bx | d.bz << 4];
+		return (WE_Biome)d.chunk.getBiomes().getNoiseBiome(d.bx, 0, d.bz);
 	}
 }
