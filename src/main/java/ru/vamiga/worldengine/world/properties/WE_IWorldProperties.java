@@ -27,6 +27,7 @@
 package ru.vamiga.worldengine.world.properties;
 
 import ru.vamiga.worldengine.world.biome.WE_Biome;
+import ru.vamiga.worldengine.world.gen.noise.WE_IReliefGenerator;
 
 /**
  * ИНТЕРФЕЙС. Класс с пользовательскими настройками мира, генератор читает их.
@@ -87,6 +88,10 @@ public interface WE_IWorldProperties extends WE_IPropsWithGensAndCons {
 	 * @author VamigA
 	 */
 	interface IGenBiomeMapLayer {
-		//TODO!
+		/**
+		 * Шумовой класс слоя биомной карты (возвращает его).
+		 * @return WE_IReliefGenerator - генератор.
+		 */
+		WE_IReliefGenerator getReliefGenerator();
 	}
 }

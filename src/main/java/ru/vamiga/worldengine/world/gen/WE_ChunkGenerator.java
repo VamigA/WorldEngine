@@ -13,14 +13,15 @@ import net.minecraft.world.gen.Heightmap.Type;
 import net.minecraft.world.gen.WorldGenRegion;
 import ru.vamiga.worldengine.world.biome.WE_BiomeProvider;
 import ru.vamiga.worldengine.world.gen.noise.WE_PerlinNoise;
+
 //TODO Костыли!
 public class WE_ChunkGenerator<C extends GenerationSettings> extends ChunkGenerator<C> {
 	public WE_PerlinNoise n;
-	
+
 	public WE_ChunkGenerator(IWorld myWorld) {
 
-		super(myWorld, new WE_BiomeProvider(Biome.BIOMES), (C) new GenerationSettings());
-		n = new WE_PerlinNoise(myWorld.getSeed(), 0.5, 6, 400, 50, 400, 64, (byte)2);
+		super(myWorld, new WE_BiomeProvider(), (C) new GenerationSettings());
+		n = new WE_PerlinNoise(myWorld.getSeed(), 0.5, 6, 400, 50, 400, 64, (byte) 2);
 	}
 
 	@Override
@@ -35,12 +36,13 @@ public class WE_ChunkGenerator<C extends GenerationSettings> extends ChunkGenera
 		int l = chunkpos1.getZStart();
 		double d0 = 0.0625D;
 		BlockPos.Mutable blockpos$mutable = new BlockPos.Mutable();
-		
+
 		for (int i1 = 0; i1 < 16; ++i1) {
 			for (int j1 = 0; j1 < 16; ++j1) {
 				double h = n.genNoise2D(chunkpos.x * 16 + i1, chunkpos.z * 16 + j1);
-				for(int y = 0; y <= h; y++)
-					p_225551_2_.setBlockState(blockpos$mutable.setPos(i1, y, j1), Blocks.STONE.getDefaultState(), false);
+				for (int y = 0; y <= h; y++)
+					p_225551_2_.setBlockState(blockpos$mutable.setPos(i1, y, j1), Blocks.STONE.getDefaultState(),
+							false);
 			}
 		}
 	}
@@ -59,7 +61,8 @@ public class WE_ChunkGenerator<C extends GenerationSettings> extends ChunkGenera
 	public int func_222529_a(int p_222529_1_, int p_222529_2_, Type heightmapType) {
 		return 0;
 	}
-	
+
 	@Override
-	public void decorate(WorldGenRegion region) {}
+	public void decorate(WorldGenRegion region) {
+	}
 }

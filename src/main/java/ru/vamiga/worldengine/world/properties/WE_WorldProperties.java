@@ -30,6 +30,9 @@ import java.util.ArrayList;
 
 import ru.vamiga.worldengine.WE_WorldRegistry;
 import ru.vamiga.worldengine.world.biome.WE_Biome;
+import ru.vamiga.worldengine.world.gen.noise.WE_IReliefGenerator;
+import ru.vamiga.worldengine.world.gen.noise.WE_PerlinNoise;
+import ru.vamiga.worldengine.world.gen.noise.WE_ValueNoise;
 
 /**
  * Класс с пользовательскими настройками мира, генератор читает их.
@@ -46,13 +49,13 @@ public class WE_WorldProperties extends WE_AbstactProperties implements WE_IWorl
 	/** Идентификатор биома: 1) Биом по умолчанию (установите его). 2) Последний добавленный биом (не редактируйте его). */
 	public int defaultBiomeId, lastBiome;
 	
-	/**
-	 * Конструктор. Не забудьте позже отметить условия генерации блоков ландшафта в genConditions здесь (суперкласс WE_AbstactProperties содержит его).
-	 * @param defaultBiomeId_p Идентификатор биома по умолчанию (можно задать его и позже, поэтому можете и просто пока задать любое значение).
-	 */
-	public WE_WorldProperties(int defaultBiomeId_p) {
-		super(); biomes = new ArrayList<WE_Biome>(); reliefLayers = new ArrayList<GenReliefLayer>(); bMapLayers = new ArrayList<GenBiomeMapLayer>();
-		defaultBiomeId = defaultBiomeId_p;
+	/** Конструктор. Не забудьте позже отметить условия генерации блоков ландшафта в genConditions здесь (суперкласс WE_AbstactProperties содержит его). */
+	public WE_WorldProperties() {
+		reliefLayers = new ArrayList<GenReliefLayer  >();
+		bMapLayers   = new ArrayList<GenBiomeMapLayer>();
+		
+		biomes = new ArrayList<WE_Biome>();
+		defaultBiomeId = -1;
 	}
 	
 	/**
@@ -89,9 +92,19 @@ public class WE_WorldProperties extends WE_AbstactProperties implements WE_IWorl
 		reliefLayers.clear();
 	}
 	
-	/** Добавляет слой карты в список. */
-	public void addMapLayer() {
-		bMapLayers.add(new GenBiomeMapLayer()); //TODO!
+	/**
+	 * Добавляет слой карты в список.
+	 * @param isPerlin Если true, то будет использован шум Перлина, если false - шум значений.
+	 * @param gPers Стойкость (амплитудный множитель для каждой октавы относительно предыдущей).
+	 * @param nOcts Количество октав.
+	 * @param sx Множитель масштаба по X всей волны.
+	 * @param sy Множитель масштаба по Y всей волны.
+	 * @param sz Множитель масштаба по Z всей волны.
+	 * @param sum Высота (будет просто суммировано к конечному результату).
+	 * @param inter Используемая функция сглаживания значений (0 - нет; 1 - smoothstep; 2 - smootherstep).
+	 */
+	public void addMapLayer(boolean isPerlin, double gPers, int nOcts, double sx, double sy, double sz, int sum, byte inter) {
+		bMapLayers.add(new GenBiomeMapLayer(isPerlin, gPers, nOcts, sx, sy, sz, sum, inter));
 	}
 	/** Очищает список слоев карты. */
 	public void clearMapLayers() {
@@ -113,7 +126,34 @@ public class WE_WorldProperties extends WE_AbstactProperties implements WE_IWorl
 	 * @author VamigA
 	 */
 	public class GenBiomeMapLayer implements IGenBiomeMapLayer {
-		//TODO!
+		/** Шумовой класс слоя биомной карты. */
+		public WE_IReliefGenerator biomeMapLayerNoise;
+		
+		/**
+		 * Конструктор.
+		 * @param isPerlin Если true, то будет использован шум Перлина, если false - шум значений.
+		 * @param gPers Стойкость (амплитудный множитель для каждой октавы относительно предыдущей).
+		 * @param nOcts Количество октав.
+		 * @param sx Множитель масштаба по X всей волны.
+		 * @param sy Множитель масштаба по Y всей волны.
+		 * @param sz Множитель масштаба по Z всей волны.
+		 * @param sum Высота (будет просто суммировано к конечному результату).
+		 * @param inter Используемая функция сглаживания значений (0 - нет; 1 - smoothstep; 2 - smootherstep).
+		 */
+		public GenBiomeMapLayer(boolean isPerlin, double gPers, int nOcts, double sx, double sy, double sz, int sum, byte inter) {
+			biomeMapLayerNoise = isPerlin ?
+				new WE_PerlinNoise(0, gPers, nOcts, sx, sy, sz, sum, inter) :
+				new  WE_ValueNoise(0, gPers, nOcts, sx, sy, sz, sum, inter);
+		}
+		
+		/**
+		 * Шумовой класс слоя биомной карты (возвращает его).
+		 * @return WE_IReliefGenerator - генератор.
+		 */
+		@Override
+		public WE_IReliefGenerator getReliefGenerator() {
+			return biomeMapLayerNoise;
+		}
 	}
 	
 	/**
@@ -131,7 +171,7 @@ public class WE_WorldProperties extends WE_AbstactProperties implements WE_IWorl
 	 */
 	@Override
 	public WE_Biome getDefaultBiome() {
-		return defaultBiomeId < sizeofBiomes() ? getBiome(defaultBiomeId) : WE_WorldRegistry.WEBiome;
+		return defaultBiomeId >= 0 && defaultBiomeId < sizeofBiomes() ? getBiome(defaultBiomeId) : WE_WorldRegistry.WEBiome;
 	}
 	/**
 	 * Возвращает количество элементов в списке биомов: WE_Biome.

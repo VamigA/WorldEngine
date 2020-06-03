@@ -29,13 +29,9 @@ package ru.vamiga.worldengine;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig.Type;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 /**
  * Главный класс WorldEngine: инициализирует модификацию и содержит важную информацию о модификации.
@@ -59,28 +55,9 @@ public class WorldEngine {
 		log("-=| Copyright (C) 2020 Vamig Aliev, all rights reserved."                    );
 		log("-=| Licensed under the GNU LGPL 3 or later."                                 );
 		
-		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup        );
-		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
-		
 		ModLoadingContext.get().registerConfig(Type.COMMON, WE_Configuration.common_spec);
 		
-		MinecraftForge.EVENT_BUS.register(this);
-	}
-	
-	/**
-	 * Начальная настройка (преинициализация) игры и всей модификации.
-	 * @param event Событие Forge на этом этапе.
-	 */
-	public void setup(FMLCommonSetupEvent event) {
 		WE_WorldRegistry.register();
-	}
-	
-	/**
-	 * То же самое, но ТОЛЬКО НА СТОРОНЕ КЛИЕНТА.
-	 * @param event Событие Forge на этом этапе.
-	 */
-	public void doClientStuff(FMLClientSetupEvent event) {
-		
 	}
 	
 	/**

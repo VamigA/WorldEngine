@@ -1,18 +1,16 @@
 package ru.vamiga.worldengine.world.biome;
 
-import java.util.Set;
-
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.Biomes;
 import net.minecraft.world.biome.provider.BiomeProvider;
-//TODO Костыли!
+import ru.vamiga.worldengine.WE_WorldRegistry;
+
 public class WE_BiomeProvider extends BiomeProvider {
-	public WE_BiomeProvider(Set<Biome> biomesIn) {
-		super(biomesIn);
+	public WE_BiomeProvider() {
+		super(null);
 	}
 	
 	@Override
 	public Biome getNoiseBiome(int x, int y, int z) {
-		return Biomes.BEACH;
+		return WE_WorldRegistry.WEBiome;
 	}
 }

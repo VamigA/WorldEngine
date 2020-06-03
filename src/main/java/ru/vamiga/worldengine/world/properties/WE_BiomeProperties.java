@@ -29,6 +29,10 @@ package ru.vamiga.worldengine.world.properties;
 import java.util.ArrayList;
 
 import net.minecraft.world.biome.Biome.Builder;
+import net.minecraft.world.biome.Biome.Category;
+import net.minecraft.world.biome.Biome.RainType;
+import net.minecraft.world.gen.surfacebuilders.SurfaceBuilder;
+import ru.vamiga.worldengine.WE_Configuration.CommonConfig;
 
 /**
  * Класс с пользовательскими настройками биома, генератор читает их.
@@ -36,7 +40,7 @@ import net.minecraft.world.biome.Biome.Builder;
  */
 public class WE_BiomeProperties extends WE_AbstactProperties implements WE_IBiomeProperties {
 	/** Ванильный мусор. */
-	public Builder vanillaShit; //TODO!
+	public Builder vanillaShit;
 	
 	/**
 	 * Список со свойствами рельефа в этом биоме для каждого рельефного слоя в классе WE_WorldProperties.
@@ -46,7 +50,49 @@ public class WE_BiomeProperties extends WE_AbstactProperties implements WE_IBiom
 	
 	/** Конструктор. Не забудьте позже отметить условия генерации биома в genConditions здесь (суперкласс WE_AbstactProperties содержит его). */
 	public WE_BiomeProperties() {
-		super(); vanillaShit = new Builder(); layersTProps = new ArrayList<ReliefLayerTerrainPropertiesInBiome>();
+		layersTProps = new ArrayList<ReliefLayerTerrainPropertiesInBiome>();
+		
+		RainType rt;
+		switch(CommonConfig.cfgWEBiomePRType  .get()) {
+			default:
+			case "none": rt = RainType.NONE; break;
+			case "rain": rt = RainType.RAIN; break;
+			case "snow": rt = RainType.SNOW; break;
+		}
+		
+		Category c ;
+		switch(CommonConfig.cfgWEBiomePCategor.get()) {
+			default:
+			case "none"         : c = Category.NONE         ; break;
+			case "taiga"        : c = Category.TAIGA        ; break;
+			case "extreme_hills": c = Category.EXTREME_HILLS; break;
+			case "jungle"       : c = Category.JUNGLE       ; break;
+			case "mesa"         : c = Category.MESA         ; break;
+			case "plains"       : c = Category.PLAINS       ; break;
+			case "savanna"      : c = Category.SAVANNA      ; break;
+			case "icy"          : c = Category.ICY          ; break;
+			case "the_end"      : c = Category.THEEND       ; break;
+			case "beach"        : c = Category.BEACH        ; break;
+			case "forest"       : c = Category.FOREST       ; break;
+			case "ocean"        : c = Category.OCEAN        ; break;
+			case "desert"       : c = Category.DESERT       ; break;
+			case "river"        : c = Category.RIVER        ; break;
+			case "swamp"        : c = Category.SWAMP        ; break;
+			case "mushroom"     : c = Category.MUSHROOM     ; break;
+			case "nether"       : c = Category.NETHER       ; break;
+		}
+		
+		vanillaShit = new Builder();
+		vanillaShit.surfaceBuilder(SurfaceBuilder.NOPE, SurfaceBuilder.GRASS_DIRT_GRAVEL_CONFIG);
+		vanillaShit.precipitation (rt                                                          );
+		vanillaShit.category      (c                                                           );
+		vanillaShit.depth         (CommonConfig.cfgWEBiomePBaseHei.get().floatValue()          );
+		vanillaShit.scale         (CommonConfig.cfgWEBiomePHVariat.get().floatValue()          );
+		vanillaShit.temperature   (CommonConfig.cfgWEBiomePTemp   .get().floatValue()          );
+		vanillaShit.downfall      (CommonConfig.cfgWEBiomePRain   .get().floatValue()          );
+		vanillaShit.waterColor    (CommonConfig.cfgWEBiomePWColor .get()                       );
+		vanillaShit.waterFogColor (CommonConfig.cfgWEBiomePWFColor.get()                       );
+		vanillaShit.parent        (CommonConfig.cfgWEBiomePBRgName.get()                       );
 	}
 	
 	/** Добавляет свойства рельефа в этом биоме в список. */

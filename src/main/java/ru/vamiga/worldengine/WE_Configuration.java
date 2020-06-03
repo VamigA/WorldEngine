@@ -57,16 +57,15 @@ public class WE_Configuration {
 		 * Конфигурации логические:
 		 * 1) cfgAddWorldTypeWE - добавляет тип мира "WorldEngine" (true).
 		 * 2) cfgRegisterBiomeWE - регистрирует основной биом WorldEngine (true).
-		 * 3) cfgWEBiomePWRain - активирует дождь в биоме WorldEngine (true).
-		 * 4) cfgWEBiomePWSnow - активирует снегопад в биоме WorldEngine (false).
 		 */
-		public static BooleanValue cfgAddWorldTypeWE, cfgRegisterBiomeWE, cfgWEBiomePWRain, cfgWEBiomePWSnow;
+		public static BooleanValue cfgAddWorldTypeWE, cfgRegisterBiomeWE;
 		
 		/**
 		 * Конфигурации целые:
 		 * 1) cfgWEBiomePWColor - цвет воды в биоме WorldEngine (16777215).
+		 * 2) cfgWEBiomePWFColor - цвет водного тумана в биоме WorldEngine (16777215).
 		 */
-		public static IntValue cfgWEBiomePWColor;
+		public static IntValue cfgWEBiomePWColor, cfgWEBiomePWFColor;
 		
 		/**
 		 * Конфигурации дробные:
@@ -80,10 +79,12 @@ public class WE_Configuration {
 		/**
 		 * Конфигурации строковые:
 		 * 1) cfgWorldTypeWEName - имя типа мира "WorldEngine" в пользовательском интерфейсе ("WorldEngine").
-		 * 2) cfgWEBiomePName - имя биома WorldEngine, используемое в реестре и отображаемое в интерфейсе игры ("-=|_/WorldEngine\_|=-").
-		 * 3) cfgWEBiomePBRgName - базовое имя биома WorldEngine для "мутаций" (""). Не используется модификацией в игре.
+		 * 2) cfgWEBiomePName - имя биома WorldEngine, используемое в реестре и отображаемое в интерфейсе игры ("worldengine_standard").
+		 * 3) cfgWEBiomePRType - тип дождя в биоме WorldEngine: none, rain, snow ("rain").
+		 * 4) cfgWEBiomePCategor - категория биома WorldEngine: none, taiga, extreme_hills, jungle, mesa, plains, savanna, icy, the_end, beach, forest, ocean, desert, river, swamp, mushroom, nether ("none").
+		 * 5) cfgWEBiomePBRgName - базовое имя биома WorldEngine для "мутаций" (""). Не используется модификацией в игре.
 		 */
-		public static ConfigValue<String> cfgWorldTypeWEName, cfgWEBiomePName, cfgWEBiomePBRgName;
+		public static ConfigValue<String> cfgWorldTypeWEName, cfgWEBiomePName, cfgWEBiomePRType, cfgWEBiomePCategor, cfgWEBiomePBRgName;
 		
 		/**
 		 * Конструктор.
@@ -99,14 +100,15 @@ public class WE_Configuration {
 			/*/ Конфигурации стандартного технического биома WorldEngine. /*/
 			builder.push("WE_Biome");
 			cfgRegisterBiomeWE = builder.comment("If it is true, standard WE_Biome will be registered."      ).translation(WorldEngine.modid + ".config.registerBiomeWE").define       ("registerBiomeWE", true                    );
-			cfgWEBiomePName    = builder.comment("Standard biome in vanilla: biome name."                    ).translation(WorldEngine.modid + ".config.WEBiomePName"   ).define       ("WEBiomePName"   , "-=|_/WorldEngine\\_|=-");
+			cfgWEBiomePName    = builder.comment("Standard biome in vanilla: biome name."                    ).translation(WorldEngine.modid + ".config.WEBiomePName"   ).define       ("WEBiomePName"   , "worldengine_standard"  );
+			cfgWEBiomePRType   = builder.comment("Standard biome in vanilla: rain type."                     ).translation(WorldEngine.modid + ".config.WEBiomePRType"  ).define       ("WEBiomePRType"  , "rain"                  );
+			cfgWEBiomePCategor = builder.comment("Standard biome in vanilla: category."                      ).translation(WorldEngine.modid + ".config.WEBiomePCategor").define       ("WEBiomePCategor", "none"                  );
 			cfgWEBiomePTemp    = builder.comment("Standard biome in vanilla: temperature."                   ).translation(WorldEngine.modid + ".config.WEBiomePTemp"   ).defineInRange("WEBiomePTemp"   , 0.5     ,  0.0, 2.0     );
 			cfgWEBiomePRain    = builder.comment("Standard biome in vanilla: rainfall."                      ).translation(WorldEngine.modid + ".config.WEBiomePRain"   ).defineInRange("WEBiomePRain"   , 0.5     ,  0.0, 1.0     );
 			cfgWEBiomePBaseHei = builder.comment("Standard biome in vanilla: base height. Useless."          ).translation(WorldEngine.modid + ".config.WEBiomePBaseHei").defineInRange("WEBiomePBaseHei", 0.1     , -5.0, 5.0     );
 			cfgWEBiomePHVariat = builder.comment("Standard biome in vanilla: height variation. Useless."     ).translation(WorldEngine.modid + ".config.WEBiomePHVariat").defineInRange("WEBiomePHVariat", 0.2     , -5.0, 5.0     );
-			cfgWEBiomePWRain   = builder.comment("Standard biome in vanilla: enable rain."                   ).translation(WorldEngine.modid + ".config.WEBiomePWRain"  ).define       ("WEBiomePWRain"  , true                    );
-			cfgWEBiomePWSnow   = builder.comment("Standard biome in vanilla: enable snow."                   ).translation(WorldEngine.modid + ".config.WEBiomePWSnow"  ).define       ("WEBiomePWSnow"  , false                   );
 			cfgWEBiomePWColor  = builder.comment("Standard biome in vanilla: water color."                   ).translation(WorldEngine.modid + ".config.WEBiomePWColor" ).defineInRange("WEBiomePWColor" , 16777215,    0, 16777215);
+			cfgWEBiomePWFColor = builder.comment("Standard biome in vanilla: water fog color."               ).translation(WorldEngine.modid + ".config.WEBiomePWFColor").defineInRange("WEBiomePWFColor", 16777215,    0, 16777215);
 			cfgWEBiomePBRgName = builder.comment("Standard biome in vanilla: base name (mutations). Useless.").translation(WorldEngine.modid + ".config.WEBiomePBRgName").define       ("WEBiomePBRgName", ""                      );
 			builder.pop();
 		}

@@ -26,9 +26,12 @@
 
 package ru.vamiga.worldengine;
 
+import net.minecraftforge.registries.ForgeRegistries;
 import ru.vamiga.worldengine.WE_Configuration.CommonConfig;
 import ru.vamiga.worldengine.world.WE_WorldType;
 import ru.vamiga.worldengine.world.biome.WE_Biome;
+import ru.vamiga.worldengine.world.properties.WE_BiomeProperties;
+import ru.vamiga.worldengine.world.properties.WE_WorldProperties;
 
 /**
  * Инициализатор мира WorldEngine. Выполняет основную работу при запуске игры.
@@ -38,25 +41,29 @@ import ru.vamiga.worldengine.world.biome.WE_Biome;
 public class WE_WorldRegistry {
 	/** Тип мира "WorldEngine". Позволяет игроку создавать свой мир прямо в меню. */
 	public static WE_WorldType WEWorldType;
+	/** Настройки стандартного мира WorldEngine. */
+	public static WE_WorldProperties WEWorldProps;
 	/** Основной (технический) единый биом WorldEngine. */
 	public static WE_Biome WEBiome;
+	/** Настройки стандартного биома WorldEngine. */
+	public static WE_BiomeProperties WEBiomeProps;
 	
-	/**
-	 * Функция прединициализации.
-	 * @param event - событие прединициализации.
-	 */
+	/** Функция регистрации. */
 	public static void register() {
 		/*/ Создание основного биома модификации... /*/
-	//	WEBiome = new WE_Biome();
+		WEBiomeProps = new WE_BiomeProperties(            );
+		WEBiome      = new WE_Biome          (WEBiomeProps);
+		
+		/*/ Регистрация основного биома модификации... /*/
+		if(CommonConfig.cfgRegisterBiomeWE.get()) {
+			WEBiome.setRegistryName(WorldEngine.modid + ":" + CommonConfig.cfgWEBiomePName.get());
+			ForgeRegistries.BIOMES.register(WEBiome);
+		}
 		
 		/*/ Добавление типа мира "WorldEngine"... /*/
-		if(CommonConfig.cfgAddWorldTypeWE.get())
-			WEWorldType = new WE_WorldType();
-		
-	//	/*/ Регистрация основного биома модификации... /*/
-	//	if(cfgRegisterBiomeWE) {
-	//		WEBiome.setRegistryName(cfgWEBiomePName);
-	//		ForgeRegistries.BIOMES.register(WEBiome);
-	//	}
+		if(CommonConfig.cfgAddWorldTypeWE.get()) {
+			WEWorldProps = new WE_WorldProperties();
+			WEWorldType  = new WE_WorldType      ();
+		}
 	}
 }
