@@ -28,6 +28,7 @@ package ru.vamiga.worldengine;
 
 import ru.vamiga.worldengine.WE_Configuration.CommonConfig;
 import ru.vamiga.worldengine.world.WE_WorldType;
+import ru.vamiga.worldengine.world.biome.WE_Biome;
 
 /**
  * Инициализатор мира WorldEngine. Выполняет основную работу при запуске игры.
@@ -38,14 +39,14 @@ public class WE_WorldRegistry {
 	/** Тип мира "WorldEngine". Позволяет игроку создавать свой мир прямо в меню. */
 	public static WE_WorldType WEWorldType;
 	/** Основной (технический) единый биом WorldEngine. */
-	//public static WE_Biome WEBiome;
+	public static WE_Biome WEBiome;
 	
 	/**
 	 * Функция прединициализации.
 	 * @param event - событие прединициализации.
 	 */
 	public static void register() {
-	//	/*/ Создание основного биома модификации... /*/
+		/*/ Создание основного биома модификации... /*/
 	//	WEBiome = new WE_Biome();
 		
 		/*/ Добавление типа мира "WorldEngine"... /*/
