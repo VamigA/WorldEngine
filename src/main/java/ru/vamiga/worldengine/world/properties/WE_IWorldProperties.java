@@ -68,7 +68,11 @@ public interface WE_IWorldProperties extends WE_IPropsWithGensAndCons {
 	 * @author VamigA
 	 */
 	interface IGenReliefLayer {
-		//TODO!
+		/**
+		 * Шумовой класс рельефного слоя (возвращает его).
+		 * @return WE_IReliefGenerator - генератор.
+		 */
+		WE_IReliefGenerator getReliefGenerator();
 	}
 	
 	/**

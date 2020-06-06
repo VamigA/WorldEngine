@@ -24,43 +24,23 @@
  * along with WorldEngine. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ru.vamiga.worldengine.world.gen.custom.abstracts;
+package ru.vamiga.worldengine.world.gen.custom;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.util.math.BlockPos;
-import ru.vamiga.worldengine.world.biome.WE_Biome;
+import ru.vamiga.worldengine.world.gen.custom.abstracts.WE_CreateChunkGen_InXZ;
+import ru.vamiga.worldengine.world.gen.custom.abstracts.WE_GenData;
 
 /**
- * Первая стадия генерации чанков: абстрактный класс пользовательского генератора на каждый 256-блоковый слой [X, Z].
+ * Основной стандартный пользовательский генератор WorldEngine: генератор ландшафта!
+ * Создает карты высоты (GenReliefLayer), а затем устанавливает каменные блоки с водой на основе этих данных карт.
  * @author VamigA
  */
-public abstract class WE_CreateChunkGen_InXZ implements WE_ICreateChunkGen_InXZ {
+public class WE_TerrainGenerator extends WE_CreateChunkGen_InXZ {
 	/**
-	 * Получает блок с координат в чанке.
+	 * Функция генерации.
 	 * @param d Нынешние данные генератора.
-	 * @param ly Локальная координата Y в этом чанке.
-	 * @return Нужный блок.
 	 */
-	public BlockState getBlock(WE_GenData d, int ly) {
-		return d.chunk.getBlockState(new BlockPos(d.bx, ly, d.bz));
-	}
-	
-	/**
-	 * Ставит блок в координатах в чанке.
-	 * @param d Нынешние данные генератора.
-	 * @param bs Блок.
-	 * @param ly Локальная координата Y в этом чанке.
-	 */
-	public void setBlock(WE_GenData d, BlockState bs, int ly) {
-		d.chunk.setBlockState(new BlockPos(d.bx, ly, d.bz), bs, false);
-	}
-	
-	/**
-	 * Получает биом с координат в чанке.
-	 * @param d Нынешние данные генератора.
-	 * @return Нужный биом.
-	 */
-	public WE_Biome getBiome(WE_GenData d) {
-		return d.biomes[d.bx][d.bz];
+	@Override
+	public void generate(WE_GenData d) {
+		
 	}
 }

@@ -67,6 +67,6 @@ public abstract class WE_CreateChunkGen implements WE_ICreateChunkGen {
 	 * @return Нужный биом.
 	 */
 	public WE_Biome getBiome(WE_GenData d, int lx, int lz) {
-		return (WE_Biome)d.chunk.getBiomes().getNoiseBiome(lx, 0, lz);
+		return d.biomes[lx][lz];
 	}
 }

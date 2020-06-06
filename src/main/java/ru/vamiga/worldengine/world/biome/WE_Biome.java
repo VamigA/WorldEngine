@@ -38,10 +38,10 @@ public class WE_Biome extends Biome {
 	public WE_IBiomeProperties properties;
 	
 	/**
-	 * »дентификатор биома в реестре игры. WorldEngine автоматически записывает сюда значение.
-	 * «начение -1 означает, что в данный момент биом не имеет идентификатора в игре (веро€тно, не зарегистрирован).
+	 * Ѕиом, который будет выдаватьс€ уже дл€ самой игры. ¬едь генератор использует свою систему биомов.
+	 * WorldEngine автоматически записывает сюда значение на основании того, зарегистрирован ли этот биом в игре.
 	 */
-	public int regID;
+	public Biome forGame;
 	
 	/**
 	 *  онструктор.
@@ -49,6 +49,6 @@ public class WE_Biome extends Biome {
 	 */
 	public WE_Biome(WE_IBiomeProperties weProps) {
 		super(weProps.getVanillaBiomeProperties());
-		properties = weProps; regID = -1;
+		properties = weProps; forGame = null;
 	}
 }

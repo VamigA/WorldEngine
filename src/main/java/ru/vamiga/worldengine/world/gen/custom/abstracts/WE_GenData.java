@@ -26,8 +26,9 @@
 
 package ru.vamiga.worldengine.world.gen.custom.abstracts;
 
+import net.minecraft.world.IWorld;
 import net.minecraft.world.chunk.IChunk;
-import net.minecraft.world.gen.WorldGenRegion;
+import ru.vamiga.worldengine.world.biome.WE_Biome;
 import ru.vamiga.worldengine.world.gen.WE_ChunkGenerator;
 
 /**
@@ -35,28 +36,31 @@ import ru.vamiga.worldengine.world.gen.WE_ChunkGenerator;
  * @author VamigA
  */
 public class WE_GenData {
-	/** Главный генератор чанков WorldEngine. Здесь можно получить World или Random. */
+	/** Главный генератор чанков WorldEngine. */
 	public WE_ChunkGenerator<?> generator;
-	/** Генерируемый регион мира. Здесь можно получить World или Random, а также координаты главного генерируемого чанка. */
-	public WorldGenRegion region;
+	/** Сам генерируемый мир. Здесь можно взять World или Random. */
+	public IWorld world;
 	/** Сам генерируемый чанк. Отсюда можно установить блок или получить его на координатах, а также узнать биомы. */
 	public IChunk chunk;
+	/** Массив биомов чанка от WorldEngine. */
+	public WE_Biome[][] biomes;
 	/** Данные высот слоев рельефа в этом чанке. */
-	public int[][] relief;
+	public int[][][] relief;
 	/** Локальные координаты блока в этом чанке (0...15; Y: 0...255). Они не всегда используются. */
 	public int bx, by, bz;
 	
 	/**
 	 * Конструктор.
 	 * @param gen Главный генератор чанков WorldEngine.
-	 * @param reg Генерируемый регион мира.
-	 * @param ch Сам генерируемый чанк.
+	 * @param wld Сам генерируемый мир.
+	 * @param chk Сам генерируемый чанк.
+	 * @param bms Массив биомов чанка от WorldEngine.
 	 * @param rel Данные высот слоев рельефа в этом чанке.
 	 * @param bxp Локальная координата X блока в этом чанке.
 	 * @param byp Локальная координата Y блока в этом чанке.
 	 * @param bzp Локальная координата Z блока в этом чанке.
 	 */
-	public WE_GenData(WE_ChunkGenerator<?> gen, WorldGenRegion reg, IChunk ch, int[][] rel, int bxp, int byp, int bzp) {
-		generator = gen; region = reg; chunk = ch; relief = rel; bx = bxp; by = byp; bz = bzp;
+	public WE_GenData(WE_ChunkGenerator<?> gen, IWorld wld, IChunk chk, WE_Biome[][] bms, int[][][] rel, int bxp, int byp, int bzp) {
+		generator = gen; world = wld; chunk = chk; biomes = bms; relief = rel; bx = bxp; by = byp; bz = bzp;
 	}
 }

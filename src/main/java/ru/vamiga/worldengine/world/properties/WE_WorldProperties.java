@@ -83,9 +83,16 @@ public class WE_WorldProperties extends WE_AbstactProperties implements WE_IWorl
 		biomes.clear();
 	}
 	
-	/** Добавляет рельефный слой в список. */
-	public void addReliefLayer() {
-		reliefLayers.add(new GenReliefLayer()); //TODO!
+	/**
+	 * Добавляет рельефный слой в список.
+	 * @param isPerlin Если true, то будет использован шум Перлина, если false - шум значений.
+	 * @param nOcts Количество октав.
+	 * @param sx Множитель масштаба по X всей волны.
+	 * @param sz Множитель масштаба по Z всей волны.
+	 * @param inter Используемая функция сглаживания значений (0 - нет; 1 - smoothstep; 2 - smootherstep).
+	 */
+	public void addReliefLayer(boolean isPerlin, int nOcts, double sx, double sz, byte inter) {
+		reliefLayers.add(new GenReliefLayer(isPerlin, nOcts, sx, sz, inter));
 	}
 	/** Очищает список рельефных слоев. */
 	public void clearReliefLayers() {
@@ -117,7 +124,31 @@ public class WE_WorldProperties extends WE_AbstactProperties implements WE_IWorl
 	 * @author VamigA
 	 */
 	public class GenReliefLayer implements IGenReliefLayer {
-		//TODO!
+		/** Шумовой класс рельефного слоя. */
+		public WE_IReliefGenerator reliefLayerNoise;
+		
+		/**
+		 * Конструктор.
+		 * @param isPerlin Если true, то будет использован шум Перлина, если false - шум значений.
+		 * @param nOcts Количество октав.
+		 * @param sx Множитель масштаба по X всей волны.
+		 * @param sz Множитель масштаба по Z всей волны.
+		 * @param inter Используемая функция сглаживания значений (0 - нет; 1 - smoothstep; 2 - smootherstep).
+		 */
+		public GenReliefLayer(boolean isPerlin, int nOcts, double sx, double sz, byte inter) {
+			reliefLayerNoise = isPerlin ?
+				new WE_PerlinNoise(0L, 0.0, nOcts, sx, 0.0, sz, 0, inter) :
+				new  WE_ValueNoise(0L, 0.0, nOcts, sx, 0.0, sz, 0, inter);
+		}
+		
+		/**
+		 * Шумовой класс рельефного слоя (возвращает его).
+		 * @return WE_IReliefGenerator - генератор.
+		 */
+		@Override
+		public WE_IReliefGenerator getReliefGenerator() {
+			return reliefLayerNoise;
+		}
 	}
 	
 	/**
@@ -142,8 +173,8 @@ public class WE_WorldProperties extends WE_AbstactProperties implements WE_IWorl
 		 */
 		public GenBiomeMapLayer(boolean isPerlin, double gPers, int nOcts, double sx, double sy, double sz, int sum, byte inter) {
 			biomeMapLayerNoise = isPerlin ?
-				new WE_PerlinNoise(0, gPers, nOcts, sx, sy, sz, sum, inter) :
-				new  WE_ValueNoise(0, gPers, nOcts, sx, sy, sz, sum, inter);
+				new WE_PerlinNoise(0L, gPers, nOcts, sx, sy, sz, sum, inter) :
+				new  WE_ValueNoise(0L, gPers, nOcts, sx, sy, sz, sum, inter);
 		}
 		
 		/**
