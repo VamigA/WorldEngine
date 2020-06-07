@@ -73,6 +73,23 @@ public interface WE_IWorldProperties extends WE_IPropsWithGensAndCons {
 		 * @return WE_IReliefGenerator - генератор.
 		 */
 		WE_IReliefGenerator getReliefGenerator();
+		
+		/**
+		 * Размер прямоугольника, в котором происходит интерполяция рельефа между биомами (в блоках).
+		 * @return Integer[0] - размер по X; Integer[1] - размер по Z.
+		 */
+		int[] getInterQuadSize();
+		/**
+		 * Используемая функция сглаживания значений (0 - нет; 1 - smoothstep; 2 - smootherstep).
+		 * @return Тип Byte.
+		 */
+		byte getInterType();
+		/**
+		 * Сглаживать ли рельеф на территории ЭТОГО БИОМА на стыках между другими биомами? Аналог переменной "interWithAnotherBiome".
+		 * (!) Используется генератором, только если генерация зашла в биом, у которого нет этого рельефного слоя.
+		 * @return Тип Boolean.
+		 */
+		boolean getInterDoIfVoid();
 	}
 	
 	/**

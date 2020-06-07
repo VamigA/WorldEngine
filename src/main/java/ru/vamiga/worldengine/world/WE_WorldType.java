@@ -26,22 +26,15 @@
 
 package ru.vamiga.worldengine.world;
 
-import java.util.function.LongFunction;
-
 import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.IExtendedNoiseRandom;
-import net.minecraft.world.gen.OverworldGenSettings;
-import net.minecraft.world.gen.area.IArea;
-import net.minecraft.world.gen.area.IAreaFactory;
-import net.minecraftforge.registries.ForgeRegistries;
 import ru.vamiga.worldengine.WE_Configuration.CommonConfig;
 import ru.vamiga.worldengine.WE_WorldRegistry;
-import ru.vamiga.worldengine.WorldEngine;
 import ru.vamiga.worldengine.util.WE_Interpolation;
 import ru.vamiga.worldengine.world.biome.WE_Biome;
 import ru.vamiga.worldengine.world.gen.WE_ChunkGenerator;
+import ru.vamiga.worldengine.world.gen.custom.WE_TerrainGenerator;
 import ru.vamiga.worldengine.world.properties.WE_AbstactProperties.GenReliefConditions.PrimitiveCondition;
 import ru.vamiga.worldengine.world.properties.WE_BiomeProperties;
 
@@ -53,8 +46,10 @@ public class WE_WorldType extends WorldType {
 	public WE_WorldType() {
 		super(CommonConfig.cfgWorldTypeWEName.get());
 		
-		WE_WorldRegistry.WEWorldProps.addReliefLayer(true, 4, 400.0, 400.0, WE_Interpolation.I_VALUEFUNC_SMOOTHERSTEP);
+		WE_WorldRegistry.WEWorldProps.addReliefLayer(true, 4, 400.0, 400.0, WE_Interpolation.I_VALUEFUNC_SMOOTHERSTEP,
+			16, 16, WE_Interpolation.I_VALUEFUNC_SMOOTHERSTEP, true);
 		WE_WorldRegistry.WEWorldProps.addMapLayer(false, 0.5, 4, 100.0, 10, 100.0, 0, WE_Interpolation.I_VALUEFUNC_SMOOTHERSTEP);
+		WE_WorldRegistry.WEWorldProps.addCCGXZ(new WE_TerrainGenerator());
 		
 		WE_BiomeProperties p1 = new WE_BiomeProperties();
 		p1.genConditions.addCon(PrimitiveCondition.PC_ACTION_MOREEQUAL);
@@ -74,10 +69,5 @@ public class WE_WorldType extends WorldType {
 	@Override
 	public ChunkGenerator<?> createChunkGenerator(World world) {
 		return new WE_ChunkGenerator<>(world, WE_WorldRegistry.WEWorldProps); //TODO Костыли!
-	}
-	
-	@Override
-	public <T extends IArea, C extends IExtendedNoiseRandom<T>> IAreaFactory<T> getBiomeLayer(IAreaFactory<T> parentLayer, OverworldGenSettings chunkSettings, LongFunction<C> contextFactory) {
-		return null;
 	}
 }

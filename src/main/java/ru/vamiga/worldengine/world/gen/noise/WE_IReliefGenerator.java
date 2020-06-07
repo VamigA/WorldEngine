@@ -44,6 +44,14 @@ public interface WE_IReliefGenerator {
 	void setSeed(long seed);
 	
 	/**
+	 * Задает параметры генератора на этом биоме.
+	 * @param pers Параметр Persistence этого рельефного слоя на этом биоме.
+	 * @param sclY Параметр ScaleY этого рельефного слоя на этом биоме.
+	 * @param hght Параметр Height этого рельефного слоя на этом биоме.
+	 */
+	void setBiomeProperties(double pers, double sclY, int hght);
+	
+	/**
 	 * Выдает высоту на этом блоке (множественные вызовы этой функции и генерируют ландшафт).
 	 * @param x Координата блока X.
 	 * @param z Координата блока Z.

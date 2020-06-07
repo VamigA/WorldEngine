@@ -26,8 +26,11 @@
 
 package ru.vamiga.worldengine.world.gen.custom;
 
+import net.minecraft.block.Blocks;
+import ru.vamiga.worldengine.world.biome.WE_BiomeProvider;
 import ru.vamiga.worldengine.world.gen.custom.abstracts.WE_CreateChunkGen_InXZ;
 import ru.vamiga.worldengine.world.gen.custom.abstracts.WE_GenData;
+import ru.vamiga.worldengine.world.gen.noise.WE_PerlinNoise;
 
 /**
  * Основной стандартный пользовательский генератор WorldEngine: генератор ландшафта!
@@ -41,6 +44,17 @@ public class WE_TerrainGenerator extends WE_CreateChunkGen_InXZ {
 	 */
 	@Override
 	public void generate(WE_GenData d) {
-		
+		if(getBiome(d) == ((WE_BiomeProvider)d.generator.getBiomeProvider()).properties.getBiome(0)) {
+			((WE_PerlinNoise)((WE_BiomeProvider)d.generator.getBiomeProvider()).properties.getReliefLayer(0).getReliefGenerator()).persistence = 0.5;
+			((WE_PerlinNoise)((WE_BiomeProvider)d.generator.getBiomeProvider()).properties.getReliefLayer(0).getReliefGenerator()).scaleY = 32;
+			((WE_PerlinNoise)((WE_BiomeProvider)d.generator.getBiomeProvider()).properties.getReliefLayer(0).getReliefGenerator()).height = 96;
+		} else if(getBiome(d) == ((WE_BiomeProvider)d.generator.getBiomeProvider()).properties.getBiome(1)) {
+			((WE_PerlinNoise)((WE_BiomeProvider)d.generator.getBiomeProvider()).properties.getReliefLayer(0).getReliefGenerator()).persistence = 0.7;
+			((WE_PerlinNoise)((WE_BiomeProvider)d.generator.getBiomeProvider()).properties.getReliefLayer(0).getReliefGenerator()).scaleY = 20;
+			((WE_PerlinNoise)((WE_BiomeProvider)d.generator.getBiomeProvider()).properties.getReliefLayer(0).getReliefGenerator()).height = 64;
+		}
+		int h = (int)((WE_PerlinNoise)((WE_BiomeProvider)d.generator.getBiomeProvider()).properties.getReliefLayer(0).getReliefGenerator()).genNoise2D(d.chunk.getPos().getXStart() + d.bx, d.chunk.getPos().getZStart() + d.bz);
+		for(int i = 0; i < h; i++)
+			setBlock(d, Blocks.STONE.getDefaultState(), i);
 	}
 }

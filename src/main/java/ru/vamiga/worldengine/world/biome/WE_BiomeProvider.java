@@ -62,8 +62,10 @@ public class WE_BiomeProvider extends BiomeProvider {
 		smart = new WE_RegionBuffer<WE_Biome>(2048, this::getWEBiomeAt);
 		
 		properties = p;
+		for(int l = 0; l < properties.sizeofReliefLayers  (); l++)
+			properties.getReliefLayer  (l).getReliefGenerator().setSeed((long)Math.pow((double)l * 347932.0 + (double)w.getSeed() + 54279127.0, 21.0) * 714L);
 		for(int l = 0; l < properties.sizeofBiomeMapLayers(); l++)
-			properties.getBiomeMapLayer(l).getReliefGenerator().setSeed((long)Math.pow((double)l * 175954.0 + (double)w.getSeed() + 35974855.0, 17.0) * 5123L);
+			properties.getBiomeMapLayer(l).getReliefGenerator().setSeed((long)Math.pow((double)l * 175954.0 + (double)w.getSeed() + 35974855.0, 17.0) * 523L);
 		
 		if(WE_WorldRegistry.WEBiome.forGame == null)
 			if(ForgeRegistries.BIOMES.containsValue((Biome)WE_WorldRegistry.WEBiome))

@@ -76,6 +76,17 @@ public abstract class WE_NoiseTemplate implements WE_IReliefGenerator {
 	}
 	
 	/**
+	 * Задает параметры генератора на этом биоме.
+	 * @param pers Параметр Persistence этого рельефного слоя на этом биоме.
+	 * @param sclY Параметр ScaleY этого рельефного слоя на этом биоме.
+	 * @param hght Параметр Height этого рельефного слоя на этом биоме.
+	 */
+	@Override
+	public void setBiomeProperties(double pers, double sclY, int hght) {
+		persistence = pers; scaleY = sclY; height = hght;
+	}
+	
+	/**
 	 * Выдает высоту на этом блоке (множественные вызовы этой функции и генерируют ландшафт).
 	 * @param x Координата блока X.
 	 * @param z Координата блока Z.

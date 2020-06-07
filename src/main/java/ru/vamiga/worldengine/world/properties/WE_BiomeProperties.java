@@ -95,9 +95,15 @@ public class WE_BiomeProperties extends WE_AbstactProperties implements WE_IBiom
 		vanillaShit.parent        (CommonConfig.cfgWEBiomePBRgName.get()                       );
 	}
 	
-	/** Добавляет свойства рельефа в этом биоме в список. */
-	public void add() {
-		layersTProps.add(new ReliefLayerTerrainPropertiesInBiome()); //TODO!
+	/**
+	 * Добавляет свойства рельефа в этом биоме в список.
+	 * @param doInter Сглаживать ли рельеф на территории ЭТОГО БИОМА на стыках между другими биомами?
+	 * @param pers Параметр Persistence этого рельефного слоя на этом биоме.
+	 * @param sclY Параметр ScaleY этого рельефного слоя на этом биоме.
+	 * @param hght Параметр Height этого рельефного слоя на этом биоме.
+	 */
+	public void add(boolean doInter, double pers, double sclY, int hght) {
+		layersTProps.add(new ReliefLayerTerrainPropertiesInBiome(doInter, pers, sclY, hght));
 	}
 	/** Очищает список свойств рельефа в этом биоме. */
 	public void clear() {
@@ -109,7 +115,59 @@ public class WE_BiomeProperties extends WE_AbstactProperties implements WE_IBiom
 	 * @author VamigA
 	 */
 	public class ReliefLayerTerrainPropertiesInBiome implements IReliefLayerTerrainPropertiesInBiome {
-		//TODO!
+		/** Сглаживать ли рельеф на территории ЭТОГО БИОМА на стыках между другими биомами? */
+		public boolean interWithAnotherBiome;
+		/** Параметры Persistence и ScaleY этого рельефного слоя на этом биоме. */
+		public double persistence, scaleY;
+		/** Параметр Height этого рельефного слоя на этом биоме. */
+		public int height;
+		
+		/**
+		 * Конструктор.
+		 * @param doInter Сглаживать ли рельеф на территории ЭТОГО БИОМА на стыках между другими биомами?
+		 * @param pers Параметр Persistence этого рельефного слоя на этом биоме.
+		 * @param sclY Параметр ScaleY этого рельефного слоя на этом биоме.
+		 * @param hght Параметр Height этого рельефного слоя на этом биоме.
+		 */
+		public ReliefLayerTerrainPropertiesInBiome(boolean doInter, double pers, double sclY, int hght) {
+			interWithAnotherBiome = doInter; persistence = pers; scaleY = sclY; height = hght;
+		}
+		
+		/**
+		 * Генератор сглаживает рельеф на стыках между биомами путем интерполяции (смотрите: GenReliefLayer).
+		 * Если выдаст false, генератор не изменит рельефа на территории ЭТОГО БИОМА на стыках между другими биомами.
+		 * Если выдаст true, генератор также сгладит рельеф на территории ЭТОГО БИОМА на стыках между другими биомами.
+		 * @return Этот параметр.
+		 */
+		@Override
+		public boolean getInterWithAnotherBiome() {
+			return interWithAnotherBiome;
+		}
+		
+		/**
+		 * Параметр Persistence этого рельефного слоя на этом биоме.
+		 * @return Этот параметр.
+		 */
+		@Override
+		public double getPersistence() {
+			return persistence;
+		}
+		/**
+		 * Параметр ScaleY этого рельефного слоя на этом биоме.
+		 * @return Этот параметр.
+		 */
+		@Override
+		public double getScaleY() {
+			return scaleY;
+		}
+		/**
+		 * Параметр Height этого рельефного слоя на этом биоме.
+		 * @return Этот параметр.
+		 */
+		@Override
+		public int getHeight() {
+			return height;
+		}
 	}
 	
 	/**

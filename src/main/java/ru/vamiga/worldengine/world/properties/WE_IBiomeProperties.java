@@ -55,6 +55,28 @@ public interface WE_IBiomeProperties extends WE_IPropsWithGensAndCons {
 	 * @author VamigA
 	 */
 	interface IReliefLayerTerrainPropertiesInBiome {
-		//TODO!
+		/**
+		 * Генератор сглаживает рельеф на стыках между биомами путем интерполяции (смотрите: GenReliefLayer).
+		 * Если выдаст false, генератор не изменит рельефа на территории ЭТОГО БИОМА на стыках между другими биомами.
+		 * Если выдаст true, генератор также сгладит рельеф на территории ЭТОГО БИОМА на стыках между другими биомами.
+		 * @return Этот параметр.
+		 */
+		boolean getInterWithAnotherBiome();
+		
+		/**
+		 * Параметр Persistence этого рельефного слоя на этом биоме.
+		 * @return Этот параметр.
+		 */
+		double getPersistence();
+		/**
+		 * Параметр ScaleY этого рельефного слоя на этом биоме.
+		 * @return Этот параметр.
+		 */
+		double getScaleY();
+		/**
+		 * Параметр Height этого рельефного слоя на этом биоме.
+		 * @return Этот параметр.
+		 */
+		int getHeight();
 	}
 }

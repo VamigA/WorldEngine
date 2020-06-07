@@ -90,9 +90,13 @@ public class WE_WorldProperties extends WE_AbstactProperties implements WE_IWorl
 	 * @param sx Множитель масштаба по X всей волны.
 	 * @param sz Множитель масштаба по Z всей волны.
 	 * @param inter Используемая функция сглаживания значений (0 - нет; 1 - smoothstep; 2 - smootherstep).
+	 * @param iX Размер прямоугольника по X, в котором происходит интерполяция рельефа между биомами (в блоках).
+	 * @param iZ Размер прямоугольника по Z, в котором происходит интерполяция рельефа между биомами (в блоках).
+	 * @param iType То же самое, что и "inter", но только для интерполяции рельефа между биомами.
+	 * @param iDoIfVoid Аналог "interWithAnotherBiome". Используется, только если генерация зашла в биом, у которого нет этого рельефного слоя.
 	 */
-	public void addReliefLayer(boolean isPerlin, int nOcts, double sx, double sz, byte inter) {
-		reliefLayers.add(new GenReliefLayer(isPerlin, nOcts, sx, sz, inter));
+	public void addReliefLayer(boolean isPerlin, int nOcts, double sx, double sz, byte inter, int iX, int iZ, byte iType, boolean iDoIfVoid) {
+		reliefLayers.add(new GenReliefLayer(isPerlin, nOcts, sx, sz, inter, iX, iZ, iType, iDoIfVoid));
 	}
 	/** Очищает список рельефных слоев. */
 	public void clearReliefLayers() {
@@ -126,6 +130,12 @@ public class WE_WorldProperties extends WE_AbstactProperties implements WE_IWorl
 	public class GenReliefLayer implements IGenReliefLayer {
 		/** Шумовой класс рельефного слоя. */
 		public WE_IReliefGenerator reliefLayerNoise;
+		/** Размер прямоугольника, в котором происходит интерполяция рельефа между биомами (в блоках). */
+		public int[] interQuadSize;
+		/** Используемая функция сглаживания значений (0 - нет; 1 - smoothstep; 2 - smootherstep). */
+		public byte interType;
+		/** Аналог "interWithAnotherBiome". Используется, только если генерация зашла в биом, у которого нет этого рельефного слоя. */
+		public boolean interDoIfVoid;
 		
 		/**
 		 * Конструктор.
@@ -134,11 +144,16 @@ public class WE_WorldProperties extends WE_AbstactProperties implements WE_IWorl
 		 * @param sx Множитель масштаба по X всей волны.
 		 * @param sz Множитель масштаба по Z всей волны.
 		 * @param inter Используемая функция сглаживания значений (0 - нет; 1 - smoothstep; 2 - smootherstep).
+		 * @param iX Размер прямоугольника по X, в котором происходит интерполяция рельефа между биомами (в блоках).
+		 * @param iZ Размер прямоугольника по Z, в котором происходит интерполяция рельефа между биомами (в блоках).
+		 * @param iType То же самое, что и "inter", но только для интерполяции рельефа между биомами.
+		 * @param iDoIfVoid Аналог "interWithAnotherBiome". Используется, только если генерация зашла в биом, у которого нет этого рельефного слоя.
 		 */
-		public GenReliefLayer(boolean isPerlin, int nOcts, double sx, double sz, byte inter) {
+		public GenReliefLayer(boolean isPerlin, int nOcts, double sx, double sz, byte inter, int iX, int iZ, byte iType, boolean iDoIfVoid) {
 			reliefLayerNoise = isPerlin ?
 				new WE_PerlinNoise(0L, 0.0, nOcts, sx, 0.0, sz, 0, inter) :
 				new  WE_ValueNoise(0L, 0.0, nOcts, sx, 0.0, sz, 0, inter);
+			interQuadSize = new int[2]; interQuadSize[0] = iX; interQuadSize[1] = iZ; interType = iType; interDoIfVoid = iDoIfVoid;
 		}
 		
 		/**
@@ -148,6 +163,32 @@ public class WE_WorldProperties extends WE_AbstactProperties implements WE_IWorl
 		@Override
 		public WE_IReliefGenerator getReliefGenerator() {
 			return reliefLayerNoise;
+		}
+		
+		/**
+		 * Размер прямоугольника, в котором происходит интерполяция рельефа между биомами (в блоках).
+		 * @return Integer[0] - размер по X; Integer[1] - размер по Z.
+		 */
+		@Override
+		public int[] getInterQuadSize() {
+			return interQuadSize;
+		}
+		/**
+		 * Используемая функция сглаживания значений (0 - нет; 1 - smoothstep; 2 - smootherstep).
+		 * @return Тип Byte.
+		 */
+		@Override
+		public byte getInterType() {
+			return interType;
+		}
+		/**
+		 * Сглаживать ли рельеф на территории ЭТОГО БИОМА на стыках между другими биомами? Аналог переменной "interWithAnotherBiome".
+		 * (!) Используется генератором, только если генерация зашла в биом, у которого нет этого рельефного слоя.
+		 * @return Тип Boolean.
+		 */
+		@Override
+		public boolean getInterDoIfVoid() {
+			return interDoIfVoid;
 		}
 	}
 	
